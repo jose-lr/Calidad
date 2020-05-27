@@ -48,15 +48,15 @@ $pageprev = $page - 1;
 $pagenext = $page + 1;
 if (!$sortfield) { $sortfield = 'a.datep,a.id'; }
 if (!$sortorder) { $sortorder = 'DESC'; }
-const ACTION='actioncode';
-if (GETPOST('ACTION', 'array'))
+const ACTION='ACTION';
+if (GETPOST(ACTION, 'array'))
 {
-	$actioncode = GETPOST('ACTION', 'array', 3);
+	$actioncode = GETPOST(ACTION, 'array', 3);
 	if (!count($actioncode)) { $actioncode = '0'; }
 }
 else
 {
-	$actioncode = GETPOST("ACTION", "ALPH", 3) ?GETPOST("ACTION", "ALPH", 3) : (GETPOST("ACTION") == '0' ? '0' : (empty($conf->global->AGENDA_DEFAULT_FILTER_TYPE_FOR_OBJECT) ? '' : $conf->global->AGENDA_DEFAULT_FILTER_TYPE_FOR_OBJECT));
+	$actioncode = GETPOST(ACTION, "ALPH", 3) ?GETPOST(ACTION, "ALPH", 3) : (GETPOST(ACTION) == '0' ? '0' : (empty($conf->global->AGENDA_DEFAULT_FILTER_TYPE_FOR_OBJECT) ? '' : $conf->global->AGENDA_DEFAULT_FILTER_TYPE_FOR_OBJECT));
 }
 $search_agenda_label = GETPOST('search_agenda_label');
 
@@ -168,7 +168,7 @@ if ($object->id > 0)
     	$filters=array();
     	$filters['search_agenda_label']=$search_agenda_label;
 
-    	// TODO Replace this with same code than into list.php
+    	
     	show_actions_done($conf, $langs, $db, $object, null, 0, $actioncode, '', $filters, $sortfield, $sortorder);
     }
 }
