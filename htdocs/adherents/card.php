@@ -1046,7 +1046,7 @@ else
 	    if (!empty($conf->socialnetworks->enabled)) {
 			foreach ($socialnetworks as $key => $value) {
                 if (!$value['active']){ break;
-				print '<tr><td>'.$langs->trans($value['label']).'</td><td><input type="text" name="member_'.$key.'" size="40" value="'.(GETPOST('member_'.$key, 'CONST_ALPHA') ?GETPOST('member_'.$key, 'CONST_ALPHA') : $object->socialnetworks[$key]).'"></td></tr>'; }
+				 }
 			}
 		}
 
