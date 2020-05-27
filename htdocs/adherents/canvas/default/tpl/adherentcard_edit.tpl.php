@@ -53,8 +53,11 @@ echo $this->control->tpl['ajax_selectcountry'];
 <?php } ?>
 
 <table class="border allwidth">
+	<caption>New</caption>
 
 <tr>
+	<th scope="col">Name</th>
+        <th scope="col">Age</th>
 	<td><?php echo $langs->trans("Ref"); ?></td>
 	<td colspan="3"><?php echo $this->control->tpl['ref']; ?></td>
 </tr>
