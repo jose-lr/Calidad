@@ -67,7 +67,6 @@ llxHeader('', $langs->trans("MembersSetup"), $help_url);
 $linkback='<a href="'.DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1">'.$langs->trans("BackToModuleList").'</a>';
 print load_fiche_titre($langs->trans("MembersSetup"), $linkback, 'title_setup');
 
-
 $head = member_admin_prepare_head();
 
 dol_fiche_head($head, 'attributes', $langs->trans("Members"), -1, 'user');
@@ -75,44 +74,6 @@ dol_fiche_head($head, 'attributes', $langs->trans("Members"), -1, 'user');
 require DOL_DOCUMENT_ROOT.'/core/tpl/admin_extrafields_view.tpl.php';
 
 dol_fiche_end();
-
-
-// Buttons
-if ($action != 'create' && $action != 'edit')
-{
-	print '<div class="tabsAction">';
-	print '<div class="inline-block divButAction"><a class="butAction" href="'.$_SERVER["PHP_SELF"]."?action=create\">".$langs->trans("NewAttribute").'</a></div>';
-	print "</div>";
-}
-
-
-/* ************************************************************************** */
-/*                                                                            */
-/* Creation of an optional field											  */
-/*                                                                            */
-/* ************************************************************************** */
-
-if ($action == 'create')
-{
-	print '<div name="topofform"></div><br>';
-	print load_fiche_titre($langs->trans('NewAttribute'));
-
-    require DOL_DOCUMENT_ROOT.'/core/tpl/admin_extrafields_add.tpl.php';
-}
-
-/* ************************************************************************** */
-/*                                                                            */
-/* Edition of an optional field                                               */
-/*                                                                            */
-/* ************************************************************************** */
-if ($action == 'edit' && ! empty($attrname))
-{
-	print '<div name="topofform"></div><br>';
-	print load_fiche_titre($langs->trans("FieldEdition", $attrname));
-
-    require DOL_DOCUMENT_ROOT.'/core/tpl/admin_extrafields_edit.tpl.php';
-}
-
 // End of page
 llxFooter();
 $db->close();
