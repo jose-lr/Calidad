@@ -79,9 +79,7 @@ class AgendaEvents extends DolibarrApi
             throw new RestException(404, 'Agenda Events not found');
         }
 
-        if (!DolibarrApiAccess::$user->rights->agenda->allactions->read && $this->actioncomm->userownerid != DolibarrApiAccess::$user->id) {
-            throw new RestException(401, "Insufficient rights to read event for owner id ".$request_data['userownerid'].' Your id is '.DolibarrApiAccess::$user->id);
-        }
+        
 
         if (!DolibarrApi::_checkAccessToResource('agenda', $this->actioncomm->id, 'actioncomm', '', 'fk_soc', 'id')) {
             throw new RestException(401, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
@@ -280,10 +278,6 @@ class AgendaEvents extends DolibarrApi
             $this->actioncomm->fetch_optionals();
             $this->actioncomm->fetch_userassigned();
             $this->actioncomm->oldcopy = clone $this->actioncomm;
-        }
-
-        if (!DolibarrApiAccess::$user->rights->agenda->allactions->delete && DolibarrApiAccess::$user->id != $this->actioncomm->userownerid) {
-            throw new RestException(401, "Insufficient rights to delete an Agenda Event of owner id ".$request_data['userownerid'].' Your id is '.DolibarrApiAccess::$user->id);
         }
 
         if (!$result) {
