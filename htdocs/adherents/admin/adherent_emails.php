@@ -38,23 +38,23 @@ $langs->loadLangs(array("admin","members"));
 
 if (! $user->admin) { accessforbidden(); }
 
-const CADENA='string';
-$oldtypetonewone=array('texte'=>'text','chaine'=>'CADENA');	// old type to new ones
+const CADENA='CADENA';
+$oldtypetonewone=array('texte'=>'text','chaine'=>CADENA);	// old type to new ones
 const ALP='alpha';
 $action = GETPOST('action', 'ALP');
 
 $error = 0;
-const EMAIL='emailtemplate:member';
+const EMAIL='EMAIL';
 // Editing global variables not related to a specific theme
 $constantes=array(
     'MEMBER_REMINDER_EMAIL'=>array('type'=>'yesno', 'label'=>$langs->trans('MEMBER_REMINDER_EMAIL', $langs->transnoentities("Module2300Name"))),
-    'ADHERENT_EMAIL_TEMPLATE_REMIND_EXPIRATION' =>'EMAIL',
-    'ADHERENT_EMAIL_TEMPLATE_AUTOREGISTER'		=>'EMAIL',		/* old was ADHERENT_AUTOREGISTER_MAIL */
-    'ADHERENT_EMAIL_TEMPLATE_MEMBER_VALIDATION'	=>'EMAIL',		/* old was ADHERENT_MAIL_VALID */
-    'ADHERENT_EMAIL_TEMPLATE_SUBSCRIPTION'		=>'EMAIL',		/* old was ADHERENT_MAIL_COTIS */
-    'ADHERENT_EMAIL_TEMPLATE_CANCELATION'		=>'EMAIL',		/* old was ADHERENT_MAIL_RESIL */
-    'ADHERENT_MAIL_FROM'=>'CADENA',
-    'ADHERENT_AUTOREGISTER_NOTIF_MAIL_SUBJECT'=>'CADENA',
+    'ADHERENT_EMAIL_TEMPLATE_REMIND_EXPIRATION' =>EMAIL,
+    'ADHERENT_EMAIL_TEMPLATE_AUTOREGISTER'		=>EMAIL,		/* old was ADHERENT_AUTOREGISTER_MAIL */
+    'ADHERENT_EMAIL_TEMPLATE_MEMBER_VALIDATION'	=>EMAIL,		/* old was ADHERENT_MAIL_VALID */
+    'ADHERENT_EMAIL_TEMPLATE_SUBSCRIPTION'		=>EMAIL,		/* old was ADHERENT_MAIL_COTIS */
+    'ADHERENT_EMAIL_TEMPLATE_CANCELATION'		=>EMAIL,		/* old was ADHERENT_MAIL_RESIL */
+    'ADHERENT_MAIL_FROM'=>CADENA,
+    'ADHERENT_AUTOREGISTER_NOTIF_MAIL_SUBJECT'=>CADENA,
     'ADHERENT_AUTOREGISTER_NOTIF_MAIL'=>'html',
 );
 
@@ -149,9 +149,6 @@ $head = member_admin_prepare_head();
 
 dol_fiche_head($head, 'emails', $langs->trans("Members"), -1, 'user');
 
-// TODO Use global form
-//print '<input type="hidden" name="token" value="'.newToken().'">';
-//print '<input type="hidden" name="action" value="updateall">';
 
 $helptext='*'.$langs->trans("FollowingConstantsWillBeSubstituted").'<br>';
 $helptext.='__DOL_MAIN_URL_ROOT__, __ID__, __FIRSTNAME__, __LASTNAME__, __FULLNAME__, __LOGIN__, __PASSWORD__, ';
