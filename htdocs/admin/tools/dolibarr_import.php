@@ -91,6 +91,7 @@ print $langs->trans("RestoreDesc3", $dolibarr_main_db_name).'<br><br>';
 <?php print $langs->trans("DatabaseName").' : <b>'.$dolibarr_main_db_name.'</b>'; ?><br><br>
 
 <table class="centpercent"><tr><td class="tdtop">
+	<caption>New</caption>
 	<th scope="col">Name</th>
         <th scope="col">Age</th>
 	<caption>New</caption>
