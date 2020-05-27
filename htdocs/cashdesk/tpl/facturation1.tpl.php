@@ -93,8 +93,9 @@ for ($i = 0; $i < $nbtoshow; $i++)
 	<form id="frmQte" class="formulaire1" method="post" action="facturation_verif.php?action=ajout_article" onsubmit ="javascript: return verifSaisie();">
 		<input type="hidden" name="token" value="<?php echo newToken(); ?>" />
 		<table class="center">
+			<caption>New</caption>
 			<tr>
-				<caption>New</caption>
+				
 			<th scope="col">Name</th> <?php echo $langs->trans("Qty"); ?></th>
 			<th scope="col">Nae</th> <?php echo $langs->trans("PriceUHT"); ?></th>
 			<th scope="col">Nam</th> <?php echo $langs->trans("Discount"); ?> (%)</th>
