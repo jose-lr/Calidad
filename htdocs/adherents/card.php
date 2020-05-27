@@ -45,16 +45,17 @@ const MEMBERS="members";
 const OTHER='other';
 const ROWID='rowid';
 // Load translation files required by the page
-$langs->loadLangs(array("companies", "bills", "MEMBERS", "users", "OTHER", "paypal"));
-const CONST_ALPHA='alpha';
-const BACK_TO_PAGE='backtopage';
-$action = GETPOST('action', 'CONST_ALPHA');
-$cancel = GETPOST('cancel', 'CONST_ALPHA');
-$backtopage = GETPOST('BACK_TO_PAGE', 'CONST_ALPHA');
-$confirm = GETPOST('confirm', 'CONST_ALPHA');
-$rowid = GETPOST('ROWID', 'int');
+$langs->loadLangs(array("companies", "bills", MEMBERS, "users", OTHER, "paypal"));
+const ALPHA='CONST_APLHA';
+const TYPE = 'typeid';
+const BACK='backtopage';
+$action = GETPOST('action', ALPHA);
+$cancel = GETPOST('cancel', ALPHA);
+$backtopage = GETPOST(BACK, ALPHA);
+$confirm = GETPOST('confirm', ALPHA);
+$rowid = GETPOST(ROWID, 'int');
 $id = GETPOST('id') ?GETPOST('id', 'int') : $rowid;
-$typeid = GETPOST('typeid', 'int');
+$typeid = GETPOST(TYPE, 'int');
 $userid = GETPOST('userid', 'int');
 $socid = GETPOST('socid', 'int');
 
@@ -87,7 +88,7 @@ if (!empty($canvas))
 }
 
 // Security check
-$result = restrictedArea($user, 'adherent', $id, '', '', 'socid', 'ROWID', $objcanvas);
+$result = restrictedArea($user, 'adherent', $id, '', '', 'socid', ROWID, $objcanvas);
 
 if ($id > 0)
 {
@@ -124,7 +125,7 @@ $hookmanager->initHooks(array('membercard', 'globalcard'));
  * 	Actions
  */
 
-$parameters = array('id'=>$id, 'ROWID'=>$id, 'objcanvas'=>$objcanvas, 'confirm'=>$confirm);
+$parameters = array('id'=>$id, ROWID=>$id, 'objcanvas'=>$objcanvas, 'confirm'=>$confirm);
 $reshook = $hookmanager->executeHooks('doActions', $parameters, $object, $action); // Note that $action and $object may have been modified by some hooks
 if ($reshook < 0) { setEventMessages($hookmanager->error, $hookmanager->errors, 'errors'); }
 
@@ -226,7 +227,7 @@ if (empty($reshook))
 		{
 			// User creation
 			$company = new Societe($db);
-			$result = $company->create_from_member($object, GETPOST('companyname', 'CONST_ALPHA'), GETPOST('companyalias', 'CONST_ALPHA'));
+			$result = $company->create_from_member($object, GETPOST('companyname', ALPHA), GETPOST('companyalias', ALPHA));
 
 			if ($result < 0)
 			{
@@ -287,26 +288,26 @@ if (empty($reshook))
 			$object->oldcopy = clone $object;
 
 			// Change values
-			$object->civility_id = trim(GETPOST("civility_id", 'CONST_ALPHA'));
-			$object->firstname   = trim(GETPOST("firstname", 'CONST_ALPHA'));
-			$object->lastname    = trim(GETPOST("lastname", 'CONST_ALPHA'));
-			$object->gender      = trim(GETPOST("gender", 'CONST_ALPHA'));
-			$object->login       = trim(GETPOST("login", 'CONST_ALPHA'));
-			$object->pass        = trim(GETPOST("pass", 'CONST_ALPHA'));
+			$object->civility_id = trim(GETPOST("civility_id", ALPHA));
+			$object->firstname   = trim(GETPOST("firstname", ALPHA));
+			$object->lastname    = trim(GETPOST("lastname", ALPHA));
+			$object->gender      = trim(GETPOST("gender", ALPHA));
+			$object->login       = trim(GETPOST("login", ALPHA));
+			$object->pass        = trim(GETPOST("pass", ALPHA));
 
-			$object->societe     = trim(GETPOST("societe", 'CONST_ALPHA')); // deprecated
-			$object->company     = trim(GETPOST("societe", 'CONST_ALPHA'));
+			$object->societe     = trim(GETPOST("societe", ALPHA)); // deprecated
+			$object->company     = trim(GETPOST("societe", ALPHA));
 
-			$object->address     = trim(GETPOST("address", 'CONST_ALPHA'));
-			$object->zip         = trim(GETPOST("zipcode", 'CONST_ALPHA'));
-			$object->town        = trim(GETPOST("town", 'CONST_ALPHA'));
+			$object->address     = trim(GETPOST("address", ALPHA));
+			$object->zip         = trim(GETPOST("zipcode", ALPHA));
+			$object->town        = trim(GETPOST("town", ALPHA));
 			$object->state_id    = GETPOST("state_id", 'int');
 			$object->country_id  = GETPOST("country_id", 'int');
 
-			$object->phone       = trim(GETPOST("phone", 'CONST_ALPHA'));
-			$object->phone_perso = trim(GETPOST("phone_perso", 'CONST_ALPHA'));
-			$object->phone_mobile = trim(GETPOST("phone_mobile", 'CONST_ALPHA'));
-			$object->email       = preg_replace('/\s+/', '', GETPOST("member_email", 'CONST_ALPHA'));
+			$object->phone       = trim(GETPOST("phone", ALPHA));
+			$object->phone_perso = trim(GETPOST("phone_perso", ALPHA));
+			$object->phone_mobile = trim(GETPOST("phone_mobile", ALPHA));
+			$object->email       = preg_replace('/\s+/', '', GETPOST("member_email", ALPHA));
 			$object->socialnetworks = array();
 			foreach ($socialnetworks as $key => $value) {
 				if (GETPOSTISSET($key) && GETPOST($key, 'alphanohtml') != '') {
@@ -319,16 +320,16 @@ if (empty($reshook))
 			//$object->linkedin    = trim(GETPOST("linkedin", 'alpha'));
 			$object->birth       = $birthdate;
 
-			$object->typeid      = GETPOST("typeid", 'int');
+			$object->typeid      = GETPOST(TYPE, 'int');
 			
-			$object->morphy      = GETPOST("morphy", 'CONST_ALPHA');
+			$object->morphy      = GETPOST("morphy", ALPHA);
 
-			if (GETPOST('deletephoto', 'CONST_ALPHA')) { $object->photo = ''; }
+			if (GETPOST('deletephoto', ALPHA)) { $object->photo = ''; }
 			elseif (!empty($_FILES['photo']['name'])) { $object->photo = dol_sanitizeFileName($_FILES['photo']['name']); }
 
 			// Get status and public property
-			$object->statut      = GETPOST("statut", 'CONST_ALPHA');
-			$object->public      = GETPOST("public", 'CONST_ALPHA');
+			$object->statut      = GETPOST("statut", ALPHA);
+			$object->public      = GETPOST("public", ALPHA);
 
 			// Fill array 'array_options' with data from add form
 			$ret = $extrafields->setOptionalsFromPost(null, $object);
@@ -444,33 +445,29 @@ if (empty($reshook))
 			$datesubscription = dol_mktime(12, 0, 0, $_POST["remonth"], $_POST["reday"], $_POST["reyear"]);
 		}
 
-		$typeid = GETPOST("typeid", 'int');
-		$civility_id = GETPOST("civility_id", 'CONST_ALPHA');
-		$lastname = GETPOST("lastname", 'CONST_ALPHA');
-		$firstname = GETPOST("firstname", 'CONST_ALPHA');
-		$gender = GETPOST("gender", 'CONST_ALPHA');
-		$societe = GETPOST("societe", 'CONST_ALPHA');
-		$address = GETPOST("address", 'CONST_ALPHA');
-		$zip = GETPOST("zipcode", 'CONST_ALPHA');
+		$typeid = GETPOST(TYPE, 'int');
+		$civility_id = GETPOST("civility_id", ALPHA);
+		$lastname = GETPOST("lastname", ALPHA);
+		$firstname = GETPOST("firstname", ALPHA);
+		$gender = GETPOST("gender", ALPHA);
+		$societe = GETPOST("societe", ALPHA);
+		$address = GETPOST("address", ALPHA);
+		$zip = GETPOST("zipcode", ALPHA);
 		$town = GETPOST("town", 'alpha');
 		$state_id = GETPOST("state_id", 'int');
 		$country_id = GETPOST("country_id", 'int');
 
-		$phone = GETPOST("phone", 'CONST_ALPHA');
-		$phone_perso = GETPOST("phone_perso", 'CONST_ALPHA');
-		$phone_mobile = GETPOST("phone_mobile", 'CONST_ALPHA');
+		$phone = GETPOST("phone", ALPHA);
+		$phone_perso = GETPOST("phone_perso", ALPHA);
+		$phone_mobile = GETPOST("phone_mobile", ALPHA);
+		$email = preg_replace('/\s+/', '', GETPOST("member_email", ALPHA));
+		$login = GETPOST("member_login", ALPHA);
+		$pass = GETPOST("password", ALPHA);
+		$photo = GETPOST("photo", ALPHA);
 		
-		// $twitter=GETPOST("member_twitter", 'alpha');
-		// $facebook=GETPOST("member_facebook", 'alpha');
-        // $linkedin=GETPOST("member_linkedin", 'alpha');
-		$email = preg_replace('/\s+/', '', GETPOST("member_email", 'CONST_ALPHA'));
-		$login = GETPOST("member_login", 'CONST_ALPHA');
-		$pass = GETPOST("password", 'CONST_ALPHA');
-		$photo = GETPOST("photo", 'CONST_ALPHA');
-		
-		$morphy = GETPOST("morphy", 'CONST_ALPHA');
-		$subscription = GETPOST("subscription", 'CONST_ALPHA');
-		$public = GETPOST("public", 'CONST_ALPHA');
+		$morphy = GETPOST("morphy", ALPHA);
+		$subscription = GETPOST("subscription", ALPHA);
+		$public = GETPOST("public", ALPHA);
 
 		$userid = GETPOST("userid", 'int');
 		$socid = GETPOST("socid", 'int');
@@ -658,7 +655,7 @@ if (empty($reshook))
 				$outputlangs = new Translate('', $conf);
 				$outputlangs->setDefaultLang(empty($object->thirdparty->default_lang) ? $mysoc->default_lang : $object->thirdparty->default_lang);
 				// Load traductions files required by page
-				$outputlangs->loadLangs(array("main", "MEMBERS"));
+				$outputlangs->loadLangs(array("main", MEMBERS));
 				// Get email content from template
 				$arraydefaultmessage = null;
 				$labeltouse = $conf->global->ADHERENT_EMAIL_TEMPLATE_MEMBER_VALIDATION;
@@ -737,7 +734,7 @@ if (empty($reshook))
 					$outputlangs = new Translate('', $conf);
 					$outputlangs->setDefaultLang(empty($object->thirdparty->default_lang) ? $mysoc->default_lang : $object->thirdparty->default_lang);
 					// Load traductions files required by page
-					$outputlangs->loadLangs(array("main", "MEMBERS"));
+					$outputlangs->loadLangs(array("main", MEMBERS));
 					// Get email content from template
 					$arraydefaultmessage = null;
 					$labeltouse = $conf->global->ADHERENT_EMAIL_TEMPLATE_CANCELATION;
@@ -896,7 +893,7 @@ else
 
 		$adht = new AdherentType($db);
 
-		print load_fiche_titre($langs->trans("NewMember"), '', 'MEMBERS');
+		print load_fiche_titre($langs->trans("NewMember"), '', MEMBERS);
 
 		if ($conf->use_javascript_ajax)
 		{
@@ -943,7 +940,7 @@ else
 		// Login
 		if (empty($conf->global->ADHERENT_LOGIN_NOT_REQUIRED))
 		{
-			print '<tr><td><span class="fieldrequired">'.$langs->trans("Login").' / '.$langs->trans("Id").'</span></td><td><input type="text" name="member_login" class="minwidth300" maxlength="50" value="'.(isset($_POST["member_login"]) ?GETPOST("member_login", 'CONST_ALPHA', 2) : $object->login).'" autofocus="autofocus"></td></tr>';
+			print '<tr><td><span class="fieldrequired">'.$langs->trans("Login").' / '.$langs->trans("Id").'</span></td><td><input type="text" name="member_login" class="minwidth300" maxlength="50" value="'.(isset($_POST["member_login"]) ?GETPOST("member_login", ALPHA, 2) : $object->login).'" autofocus="autofocus"></td></tr>';
 		}
 
 		// Password
@@ -961,7 +958,7 @@ else
 		$listetype = $adht->liste_array();
 		if (count($listetype))
 		{
-			print $form->selectarray("typeid", $listetype, GETPOST('typeid', 'int') ?GETPOST('typeid', 'int') : $typeid, count($listetype) > 1 ? 1 : 0);
+			print $form->selectarray(TYPE, $listetype, GETPOST(TYPE, 'int') ?GETPOST(TYPE, 'int') : $typeid, count($listetype) > 1 ? 1 : 0);
 		} else {
 			print '<font class="error">'.$langs->trans("NoTypeDefinedGoToSetup").'</font>';
 		}
@@ -971,11 +968,11 @@ else
 		$morphys["phy"] = $langs->trans("Physical");
 		$morphys["mor"] = $langs->trans("Moral");
 		print '<tr><td class="fieldrequired">'.$langs->trans("MemberNature")."</td><td>\n";
-		print $form->selectarray("morphy", $morphys, GETPOST('morphy', 'CONST_ALPHA') ?GETPOST('morphy', 'CONST_ALPHA') : $object->morphy, 1);
+		print $form->selectarray("morphy", $morphys, GETPOST('morphy', ALPHA) ?GETPOST('morphy', 'CONST_ALPHA') : $object->morphy, 1);
 		print "</td>\n";
 
 		// Company
-		print '<tr><td id="tdcompany">'.$langs->trans("Company").'</td><td><input type="text" name="societe" class="minwidth300" maxlength="128" value="'.(GETPOST('societe', 'CONST_ALPHA') ?GETPOST('societe', 'CONST_ALPHA') : $object->company).'"></td></tr>';
+		print '<tr><td id="tdcompany">'.$langs->trans("Company").'</td><td><input type="text" name="societe" class="minwidth300" maxlength="128" value="'.(GETPOST('societe', ALPHA) ?GETPOST('societe', ALPHA) : $object->company).'"></td></tr>';
 
 		// Civility
 		print '<tr><td>'.$langs->trans("UserTitle").'</td><td>';
@@ -983,11 +980,11 @@ else
 		print '</tr>';
 
 		// Lastname
-		print '<tr><td id="tdlastname">'.$langs->trans("Lastname").'</td><td><input type="text" name="lastname" class="minwidth300" maxlength="50" value="'.(GETPOST('lastname', 'CONST_ALPHA') ?GETPOST('lastname', 'CONST_ALPHA') : $object->lastname).'"></td>';
+		print '<tr><td id="tdlastname">'.$langs->trans("Lastname").'</td><td><input type="text" name="lastname" class="minwidth300" maxlength="50" value="'.(GETPOST('lastname', ALPHA) ?GETPOST('lastname', ALPHA) : $object->lastname).'"></td>';
 		print '</tr>';
 
 		// Firstname
-		print '<tr><td id="tdfirstname">'.$langs->trans("Firstname").'</td><td><input type="text" name="firstname" class="minwidth300" maxlength="50" value="'.(GETPOST('firstname', 'CONST_ALPHA') ?GETPOST('firstname', 'CONST_ALPHA') : $object->firstname).'"></td>';
+		print '<tr><td id="tdfirstname">'.$langs->trans("Firstname").'</td><td><input type="text" name="firstname" class="minwidth300" maxlength="50" value="'.(GETPOST('firstname', ALPHA) ?GETPOST('firstname', ALPHA) : $object->firstname).'"></td>';
 		print '</tr>';
 
 		// Gender
@@ -1015,7 +1012,7 @@ else
 		// Country
 		$object->country_id = $object->country_id ? $object->country_id : $mysoc->country_id;
 		print '<tr><td width="25%">'.$langs->trans('Country').'</td><td>';
-		print $form->select_country(GETPOST('country_id', 'CONST_ALPHA') ?GETPOST('country_id', 'CONST_ALPHA') : $object->country_id, 'country_id');
+		print $form->select_country(GETPOST('country_id', ALPHA) ?GETPOST('country_id', ALPHA) : $object->country_id, 'country_id');
 		if ($user->admin) { print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1); }
 		print '</td></tr>';
 
@@ -1035,13 +1032,13 @@ else
 		}
 
 		// Pro phone
-		print '<tr><td>'.img_picto('', 'object_phoning').' '.$langs->trans("PhonePro").'</td><td><input type="text" name="phone" size="20" value="'.(GETPOST('phone', 'CONST_ALPHA') ?GETPOST('phone', 'CONST_ALPHA') : $object->phone).'"></td></tr>';
+		print '<tr><td>'.img_picto('', 'object_phoning').' '.$langs->trans("PhonePro").'</td><td><input type="text" name="phone" size="20" value="'.(GETPOST('phone', ALPHA) ?GETPOST('phone', ALPHA) : $object->phone).'"></td></tr>';
 
 		// Personal phone
-		print '<tr><td>'.img_picto('', 'object_phoning').' '.$langs->trans("PhonePerso").'</td><td><input type="text" name="phone_perso" size="20" value="'.(GETPOST('phone_perso', 'CONST_ALPHA') ?GETPOST('phone_perso', 'CONST_ALPHA') : $object->phone_perso).'"></td></tr>';
+		print '<tr><td>'.img_picto('', 'object_phoning').' '.$langs->trans("PhonePerso").'</td><td><input type="text" name="phone_perso" size="20" value="'.(GETPOST('phone_perso', ALPHA) ?GETPOST('phone_perso', ALPHA) : $object->phone_perso).'"></td></tr>';
 
 		// Mobile phone
-		print '<tr><td>'.img_picto('', 'object_phoning_mobile').' '.$langs->trans("PhoneMobile").'</td><td><input type="text" name="phone_mobile" size="20" value="'.(GETPOST('phone_mobile', 'CONST_ALPHA') ?GETPOST('phone_mobile', 'CONST_ALPHA') : $object->phone_mobile).'"></td></tr>';
+		print '<tr><td>'.img_picto('', 'object_phoning_mobile').' '.$langs->trans("PhoneMobile").'</td><td><input type="text" name="phone_mobile" size="20" value="'.(GETPOST('phone_mobile', ALPHA) ?GETPOST('phone_mobile', ALPHA) : $object->phone_mobile).'"></td></tr>';
 
 	    if (!empty($conf->socialnetworks->enabled)) {
 			foreach ($socialnetworks as $key => $value) {
@@ -1195,14 +1192,14 @@ else
 		$morphys["phy"] = $langs->trans("Physical");
 		$morphys["mor"] = $langs->trans("Moral");
 		print '<tr><td><span class="fieldrequired">'.$langs->trans("MemberNature").'</span></td><td>';
-		print $form->selectarray("morphy", $morphys, (GETPOSTISSET("morphy") ?GETPOST("morphy", 'CONST_ALPHA') : $object->morphy));
+		print $form->selectarray("morphy", $morphys, (GETPOSTISSET("morphy") ?GETPOST("morphy", ALPHA) : $object->morphy));
 		print "</td></tr>";
 
 		// Type
 		print '<tr><td class="fieldrequired">'.$langs->trans("Type").'</td><td>';
 		if ($user->rights->adherent->creer)
 		{
-			print $form->selectarray("typeid", $adht->liste_array(), (GETPOSTISSET("typeid") ?GETPOST("typeid", 'int') : $object->typeid));
+			print $form->selectarray(TYPE, $adht->liste_array(), (GETPOSTISSET(TYPE) ?GETPOST(TYPE, 'int') : $object->typeid));
 		}
 		else
 		{
@@ -1465,7 +1462,7 @@ else
 			$outputlangs = new Translate('', $conf);
 			$outputlangs->setDefaultLang(empty($object->thirdparty->default_lang) ? $mysoc->default_lang : $object->thirdparty->default_lang);
 			// Load traductions files required by page
-			$outputlangs->loadLangs(array("main", "MEMBERS"));
+			$outputlangs->loadLangs(array("main", MEMBERS));
 			// Get email content from template
 			$arraydefaultmessage = null;
 			$labeltouse = $conf->global->ADHERENT_EMAIL_TEMPLATE_MEMBER_VALIDATION;
@@ -1500,10 +1497,10 @@ else
 			$formquestion = array();
 			if ($object->email) $formquestion[] = array('type' => 'checkbox', 'name' => 'send_mail', 'label' => $label, 'value' => ($conf->global->ADHERENT_DEFAULT_SENDINFOBYMAIL ?true:false));
 			if (!empty($conf->mailman->enabled) && !empty($conf->global->ADHERENT_USE_MAILMAN)) {
-				$formquestion[] = array('type'=>'OTHER', 'label'=>$langs->transnoentitiesnoconv("SynchroMailManEnabled"), 'value'=>'');
+				$formquestion[] = array('type'=>OTHER, 'label'=>$langs->transnoentitiesnoconv("SynchroMailManEnabled"), 'value'=>'');
 			}
 			if (!empty($conf->mailman->enabled) && !empty($conf->global->ADHERENT_USE_SPIP)) {
-				$formquestion[] = array('type'=>'OTHER', 'label'=>$langs->transnoentitiesnoconv("SynchroSpipEnabled"), 'value'=>'');
+				$formquestion[] = array('type'=>OTHER, 'label'=>$langs->transnoentitiesnoconv("SynchroSpipEnabled"), 'value'=>'');
 			}
 			print $form->formconfirm("card.php?rowid=".$id, $langs->trans("ValidateMember"), $langs->trans("ConfirmValidateMember"), "confirm_valid", $formquestion, 'yes', 1, 220);
 		}
@@ -1526,7 +1523,7 @@ else
 			$outputlangs = new Translate('', $conf);
 			$outputlangs->setDefaultLang(empty($object->thirdparty->default_lang) ? $mysoc->default_lang : $object->thirdparty->default_lang);
 			// Load traductions files required by page
-			$outputlangs->loadLangs(array("main", "MEMBERS"));
+			$outputlangs->loadLangs(array("main", MEMBERS));
 			// Get email content from template
 			$arraydefaultmessage = null;
 			$labeltouse = $conf->global->ADHERENT_EMAIL_TEMPLATE_CANCELATION;
@@ -1560,7 +1557,7 @@ else
 			// Create an array
 			$formquestion = array();
 			if ($object->email) $formquestion[] = array('type' => 'checkbox', 'name' => 'send_mail', 'label' => $label, 'value' => (!empty($conf->global->ADHERENT_DEFAULT_SENDINFOBYMAIL) ? 'true' : 'false'));
-			if ($backtopage)    $formquestion[] = array('type' => 'hidden', 'name' => 'BACK_TO_PAGE', 'value' => ($backtopage != '1' ? $backtopage : $_SERVER["HTTP_REFERER"]));
+			if ($backtopage)    $formquestion[] = array('type' => 'hidden', 'name' => BACK, 'value' => ($backtopage != '1' ? $backtopage : $_SERVER["HTTP_REFERER"]));
 			print $form->formconfirm("card.php?rowid=".$id, $langs->trans("ResiliateMember"), $langs->trans("ConfirmResiliateMember"), "confirm_resign", $formquestion, 'no', 1, 240);
 		}
 
@@ -1568,7 +1565,7 @@ else
 		if ($action == 'delete')
 		{
 			$formquestion = array();
-			if ($backtopage) $formquestion[] = array('type' => 'hidden', 'name' => 'BACK_TO_PAGE', 'value' => ($backtopage != '1' ? $backtopage : $_SERVER["HTTP_REFERER"]));
+			if ($backtopage) $formquestion[] = array('type' => 'hidden', 'name' => BACK, 'value' => ($backtopage != '1' ? $backtopage : $_SERVER["HTTP_REFERER"]));
 			print $form->formconfirm("card.php?rowid=".$id, $langs->trans("DeleteMember"), $langs->trans("ConfirmDeleteMember"), "confirm_delete", $formquestion, 'no', 1);
 		}
 
@@ -1589,7 +1586,7 @@ else
 
 		$linkback = '<a href="'.DOL_URL_ROOT.'/adherents/list.php?restore_lastsearch_values=1">'.$langs->trans("BackToList").'</a>';
 
-		dol_banner_tab($object, 'ROWID', $linkback);
+		dol_banner_tab($object, ROWID, $linkback);
 
         print '<div class="fichecenter">';
         print '<div class="fichehalfleft">';
